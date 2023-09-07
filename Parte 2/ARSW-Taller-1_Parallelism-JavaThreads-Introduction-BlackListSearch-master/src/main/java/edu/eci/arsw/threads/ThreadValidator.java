@@ -4,59 +4,71 @@
  */
 package edu.eci.arsw.threads;
 
-import edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade;
 import java.util.LinkedList;
+
+import edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade;
 
 /**
  *
- * @author daniel.perez-b
+ * @author Daniel Fernando Moreno Cerón
+ * @author Daniel Esteban Pérez Bohórquez
+ * @author Juan Francisco Terán Roman
+ * @author Juan Felipe Vivas Manrique
  */
 
+public class ThreadValidator extends Thread {
 
-public class ThreadValidator extends Thread{
-    
-    
-    private final int rangoInicial;
-    private final int rangoFinal;
-    String ipaddress;
-    
-    
-    private int ocurrencesCount=0;
-    private int checkedListsCount=0;
-    
-    private static final int BLACK_LIST_ALARM_COUNT = 5;
-    private final HostBlacklistsDataSourceFacade skds = HostBlacklistsDataSourceFacade.getInstance();
-    private final LinkedList<Integer> blackListOcurrences=new LinkedList<>();
+	private final int rangoInicial;
+	private final int rangoFinal;
+	String ipaddress;
 
-    public ThreadValidator(String ipAddres, int rangoInicial, int rangoFinal){
-        this.ipaddress = ipAddres;
-        this.rangoInicial = rangoInicial;
-        this.rangoFinal = rangoFinal;
-    }
-    
-    @Override
-    public void run() {
-         for (int i = this.rangoInicial; i < this.rangoFinal && ocurrencesCount < BLACK_LIST_ALARM_COUNT; i++){
-            checkedListsCount++;
-            if (skds.isInBlackListServer(i, ipaddress)){
-                blackListOcurrences.add(i);
-                ocurrencesCount++;
-            }
-        }
-        System.out.println("Para el thread "+ ThreadValidator.currentThread().getName() + " se encontraron " + ocurrencesCount + " ocurrencias");
-    }
+	private int ocurrencesCount = 0;
+	private int checkedListsCount = 0;
 
-    
-    public int getCheckedListsCount() {
-        return checkedListsCount;
-    }
+	private static final int BLACK_LIST_ALARM_COUNT = 5;
+	private final HostBlacklistsDataSourceFacade skds = HostBlacklistsDataSourceFacade.getInstance();
+	private LinkedList<Integer> blackListOcurrences = null;
 
-    public LinkedList<Integer> getBlackListOcurrences(){
-        return blackListOcurrences;
-    }
+	public ThreadValidator(String ipAddres, int rangoInicial, int rangoFinal, LinkedList<Integer> blackListOcurrences) {
+		this.ipaddress = ipAddres;
+		this.rangoInicial = rangoInicial;
+		this.rangoFinal = rangoFinal;
+		this.blackListOcurrences = blackListOcurrences;
+	}
 
-    public int getOcurrencesCount() {
-        return ocurrencesCount;
-    }
-    
+	@Override
+	public void run() {
+		// System.out.println(this.rangoInicial + "-" + this.rangoFinal);
+
+		for (int i = this.rangoInicial; i < this.rangoFinal; i++) {
+			checkedListsCount++;
+
+			if (blackListOcurrences.size() < BLACK_LIST_ALARM_COUNT) {
+
+				if (skds.isInBlackListServer(i, ipaddress)) {
+					synchronized (blackListOcurrences) {
+						blackListOcurrences.add(i);
+						ocurrencesCount++;
+					}
+				}
+			} else {
+				break;
+			}
+		}
+		System.out.println("Para el thread " + ThreadValidator.currentThread().getName() + " se encontraron "
+				+ ocurrencesCount + " ocurrencias");
+	}
+
+	public int getCheckedListsCount() {
+		return checkedListsCount;
+	}
+
+	public LinkedList<Integer> getBlackListOcurrences() {
+		return blackListOcurrences;
+	}
+
+	public int getOcurrencesCount() {
+		return ocurrencesCount;
+	}
+
 }
