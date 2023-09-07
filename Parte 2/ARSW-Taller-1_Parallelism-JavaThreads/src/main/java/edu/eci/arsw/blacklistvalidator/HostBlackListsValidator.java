@@ -27,7 +27,7 @@ public class HostBlackListsValidator {
 	 * is not exhaustive: When the number of occurrences is equal to
 	 * BLACK_LIST_ALARM_COUNT, the search is finished, the host reported as NOT
 	 * Trustworthy, and the list of the five blacklists returned.
-	 * 
+	 *
 	 * @param ipaddress suspicious host's IP address.
 	 * @param n,        number of threads to do servers search.
 	 * @return Blacklists numbers where the given host's IP address was found.
@@ -60,7 +60,7 @@ public class HostBlackListsValidator {
 		// Implementatmos un for para crear los hilos dependiendo del parametro de
 		// entrada N
 		for (int i = 0; i < n; i++) {
-			ThreadValidator threadValidator = new ThreadValidator(ipaddress, puntoIncial, puntoFinal);
+			ThreadValidator threadValidator = new ThreadValidator(ipaddress, puntoIncial, puntoFinal, blackListOcurrences);
 
 			puntoIncial = puntoFinal;
 			puntoFinal = Math.min(puntoFinal + partesPorHilo, skds.getRegisteredServersCount());
@@ -79,21 +79,7 @@ public class HostBlackListsValidator {
 			}
 		}
 
-//Este metodo lo pasamos a la clase de ThreadValidator, pero modificado en el
-//        for (int i=0;i<skds.getRegisteredServersCount() && ocurrencesCount<BLACK_LIST_ALARM_COUNT;i++){
-//            checkedListsCount++;
-//
-//            if (skds.isInBlackListServer(i, ipaddress)){
-//
-//                blackListOcurrences.add(i);
-//
-//                ocurrencesCount++;
-//            }
-//        }
 
-		// Recorremos la lista de hilos para extrar la informacion de cada hilo sobre:
-		// cuantas listas checkearon, cuantas ocurrencias encontraron y en cuales
-		// servidores
 		for (ThreadValidator t : hilos) {
 			checkedListsCount += t.getCheckedListsCount();
 			totalOcurrencias += t.getOcurrencesCount();
