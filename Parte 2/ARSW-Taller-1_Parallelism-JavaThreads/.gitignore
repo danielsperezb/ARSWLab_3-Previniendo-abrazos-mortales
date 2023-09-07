@@ -1,2 +1,23 @@
-target
-.DS_Store
+# Carpeta de salida de compilación
+bin/
+
+# Archivos y carpetas generados por el IDE Eclipse
+.classpath
+.project
+.settings/
+
+# Archivos y carpetas generados por el IDE IntelliJ IDEA
+.idea/
+
+# Archivos y carpetas generados por el IDE NetBeans
+nb-configuration.xml
+.nb-gradle/
+nbactions.xml
+nb-ide-private/
+nb-projects.xml
+
+# Archivos de respaldo generados por el editor
+*~
+
+# Archivos generados por Maven
+target/
