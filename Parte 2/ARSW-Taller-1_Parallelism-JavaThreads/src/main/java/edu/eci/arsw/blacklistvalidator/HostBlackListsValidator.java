@@ -83,7 +83,6 @@ public class HostBlackListsValidator {
 		for (ThreadValidator t : hilos) {
 			checkedListsCount += t.getCheckedListsCount();
 			totalOcurrencias += t.getOcurrencesCount();
-			blackListOcurrences.addAll(t.getBlackListOcurrences());
 		}
 
 		if (totalOcurrencias >= BLACK_LIST_ALARM_COUNT) {
