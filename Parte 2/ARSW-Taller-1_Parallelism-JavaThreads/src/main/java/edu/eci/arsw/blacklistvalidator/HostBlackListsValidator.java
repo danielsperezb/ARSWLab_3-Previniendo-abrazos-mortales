@@ -42,8 +42,6 @@ public class HostBlackListsValidator {
 
 		LinkedList<Integer> blackListOcurrences = new LinkedList<>();
 
-		int ocurrencesCount = 0;
-
 		// Consultas en cualquiera de las N listas negras registradas (método
 		// 'isInBlacklistServer')
 		HostBlacklistsDataSourceFacade skds = HostBlacklistsDataSourceFacade.getInstance();
