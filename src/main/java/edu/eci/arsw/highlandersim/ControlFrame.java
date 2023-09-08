@@ -84,21 +84,26 @@ public class ControlFrame extends JFrame {
         });
         toolBar.add(btnStart);
 
-        JButton btnPauseAndCheck = new JButton("Pause and check");
+        JButton btnPauseAndCheck = new JButton("Pause and check"); //NO PAUSA LOS HILOS PARA HACER BIEN EL CALCULO AL SUMAR
         btnPauseAndCheck.addActionListener(new ActionListener() {
+            
             public void actionPerformed(ActionEvent e) {
 
                 /*
 				 * COMPLETAR
                  */
+                synchronized (immortals) {
+                    for (Immortal im : immortals) {
+                        im.pause();
+                    }
+                }
+
                 int sum = 0;
                 for (Immortal im : immortals) {
                     sum += im.getHealth();
                 }
 
-                statisticsLabel.setText("<html>"+immortals.toString()+"<br>Health sum:"+ sum);
-                
-                
+                statisticsLabel.setText("<html>" + immortals.toString() + "<br>Health sum:" + sum);
 
             }
         });
@@ -111,6 +116,11 @@ public class ControlFrame extends JFrame {
                 /**
                  * IMPLEMENTAR
                  */
+                synchronized (immortals) {
+                    for (Immortal im : immortals) {
+                        im.resumeGame();
+                    }
+                }
 
             }
         });
@@ -135,8 +145,7 @@ public class ControlFrame extends JFrame {
         output = new JTextArea();
         output.setEditable(false);
         scrollPane.setViewportView(output);
-        
-        
+
         statisticsLabel = new JLabel("Immortals total health:");
         contentPane.add(statisticsLabel, BorderLayout.SOUTH);
 
@@ -144,15 +153,15 @@ public class ControlFrame extends JFrame {
 
     public List<Immortal> setupInmortals() {
 
-        ImmortalUpdateReportCallback ucb=new TextAreaUpdateReportCallback(output,scrollPane);
-        
+        ImmortalUpdateReportCallback ucb = new TextAreaUpdateReportCallback(output, scrollPane);
+
         try {
             int ni = Integer.parseInt(numOfImmortals.getText());
 
             List<Immortal> il = new LinkedList<Immortal>();
 
             for (int i = 0; i < ni; i++) {
-                Immortal i1 = new Immortal("im" + i, il, DEFAULT_IMMORTAL_HEALTH, DEFAULT_DAMAGE_VALUE,ucb);
+                Immortal i1 = new Immortal("im" + i, il, DEFAULT_IMMORTAL_HEALTH, DEFAULT_DAMAGE_VALUE, ucb);
                 il.add(i1);
             }
             return il;
@@ -165,16 +174,16 @@ public class ControlFrame extends JFrame {
 
 }
 
-class TextAreaUpdateReportCallback implements ImmortalUpdateReportCallback{
+class TextAreaUpdateReportCallback implements ImmortalUpdateReportCallback {
 
     JTextArea ta;
     JScrollPane jsp;
 
-    public TextAreaUpdateReportCallback(JTextArea ta,JScrollPane jsp) {
+    public TextAreaUpdateReportCallback(JTextArea ta, JScrollPane jsp) {
         this.ta = ta;
-        this.jsp=jsp;
-    }       
-    
+        this.jsp = jsp;
+    }
+
     @Override
     public void processReport(String report) {
         ta.append(report);
@@ -189,5 +198,5 @@ class TextAreaUpdateReportCallback implements ImmortalUpdateReportCallback{
         );
 
     }
-    
+
 }
