@@ -36,6 +36,7 @@ public class ControlFrame extends JFrame {
     private JScrollPane scrollPane;
     private JTextField numOfImmortals;
 
+    private int DEFAULT_TOTAL_HEALTH;
     /**
      * Launch the application.
      */
@@ -85,9 +86,13 @@ public class ControlFrame extends JFrame {
         toolBar.add(btnStart);
 
         JButton btnPauseAndCheck = new JButton("Pause and check"); //NO PAUSA LOS HILOS PARA HACER BIEN EL CALCULO AL SUMAR
+        JButton btnResume = new JButton("Resume");
+        
         btnPauseAndCheck.addActionListener(new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
+                btnPauseAndCheck.setEnabled(false);
+                btnResume.setEnabled(true);
 
                 /*
 				 * COMPLETAR
@@ -109,10 +114,12 @@ public class ControlFrame extends JFrame {
         });
         toolBar.add(btnPauseAndCheck);
 
-        JButton btnResume = new JButton("Resume");
+       
 
         btnResume.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                btnPauseAndCheck.setEnabled(true);
+                btnResume.setEnabled(false);
                 /**
                  * IMPLEMENTAR
                  */
