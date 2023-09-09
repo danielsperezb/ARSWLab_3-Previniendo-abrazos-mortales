@@ -1,0 +1,3 @@
+No deberia de haber una condicion de carrera, pues este problema esta relacionado a una falta de actualizacion de los inmortales que mueren, pero no esta ligado al mal funcionamiento del programa por el intento de acceso 
+y modificacion de un recurso compartido. El problema puede generar retrasos grandes, haciendo que la simulacion sea lenta, o que directamente no termine. Ahora, la solucion al
+problema, utilizando bloqueo, tampoco generaria una condicion de carrera.
