@@ -28,10 +28,6 @@ public class ControlFrame extends JFrame {
     private static final int DEFAULT_DAMAGE_VALUE = 10;
 
     private JPanel contentPane;
-    private long tiempoInicio;
-     private long tiempoFin;
-      private long tiempoTranscurrido;
-     
 
     private List<Immortal> immortals;
 
@@ -73,23 +69,16 @@ public class ControlFrame extends JFrame {
         final JButton btnStart = new JButton("Start");
         btnStart.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                tiempoInicio = System.currentTimeMillis();
 
-                btnStart.setEnabled(false);
-                
                 immortals = setupInmortals();
 
-                
-                
                 if (immortals != null) {
                     for (Immortal im : immortals) {
                         im.start();
                     }
                 }
-                
-                
 
-           
+                btnStart.setEnabled(false);
 
             }
         });
@@ -99,15 +88,6 @@ public class ControlFrame extends JFrame {
         btnPauseAndCheck.addActionListener(new ActionListener() {
             
             public void actionPerformed(ActionEvent e) {
-                tiempoFin = System.currentTimeMillis();
-                
-                tiempoTranscurrido = tiempoFin - tiempoInicio;
-
-                // Convierte el tiempo transcurrido a segundos
-                double segundosTranscurridos = tiempoTranscurrido / 1000.0;
-
-                // Muestra el tiempo transcurrido
-                System.out.println("Tiempo transcurrido: " + segundosTranscurridos + " segundos");
 
                 /*
 				 * COMPLETAR
@@ -136,8 +116,6 @@ public class ControlFrame extends JFrame {
                 /**
                  * IMPLEMENTAR
                  */
-              
-                
                 synchronized (immortals) {
                     for (Immortal im : immortals) {
                         im.resumeGame();
@@ -159,6 +137,11 @@ public class ControlFrame extends JFrame {
 
         JButton btnStop = new JButton("STOP");
         btnStop.setForeground(Color.RED);
+        btnStop.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+               System.exit(0);
+            }
+        });
         toolBar.add(btnStop);
 
         scrollPane = new JScrollPane();
